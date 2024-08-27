@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import side from "../login/side.jpg";
 import "../login/login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
@@ -8,6 +9,8 @@ function Login() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const Path = useNavigate();
 
    
 ///this state are using full for button
@@ -48,6 +51,7 @@ function Login() {
 
             if (data.success) {
                 alert('Login successful!');
+                Path('/home')
             } else {
                 alert('Login failed: ' + data.message);
             }
