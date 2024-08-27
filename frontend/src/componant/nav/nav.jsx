@@ -1,16 +1,35 @@
-import React from "react";
-import logo from "../nav/logo.png";
-import "../nav/nav.css";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {image_log} from "../nav/Home.jpg";
+
+import { Link } from "react-router-dom";
 
 function Nav() {
+    const navigate = useNavigate();
+
+
+    const handingpath = (path) => {
+        navigate(path);
+    };
+
+    useEffect(() => {
+        
+        
+
+        handingpath();
+
+
+    }, [navigate]); 
+
     return (
-        <div className="bg-white h-96  w-28 mainbox border-black shadow-lg">
-            <div className="flex flex-col ml-14 justify-between  items-center  mr-20">
-                <img src={logo} className="h-12"></img>
+        <div className="bg-white h-dvh w-28 mainbox border-black shadow-lg">
+            <div className="flex flex-col ml-14 justify-between items-center mr-20">
+                <img src="path-to-logo" className="h-12" alt="Logo" />
                 <ul className="flex flex-col gap-10 text-xl cursor-pointer">
-                    <li>Home</li>
-                    <li>Test</li>
-                    <li>Practic</li>
+                    <li><button className="border-cyan-300"><img src={image_log} alt="" /><Link to='/home'>,...</Link></button></li>
+                    <li onClick={() => handingpath("/taketest")}>Test</li>
+                    {/* <li onClick={() => handingpath("/practice")}>Practice</li> */}
                 </ul>
             </div>
         </div>
