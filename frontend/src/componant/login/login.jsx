@@ -60,9 +60,28 @@ function Login() {
 
            e.preventDefault();
            console.log("page is not login")
+        }
 
+
+        if(val==="register"){
            
 
+                const response = await fetch("http://localhost:5000/register",{
+                    method : 'POST',
+                    headers : {
+                        'Content-type' : 'application/json'
+                    },
+                    body : JSON.stringify({name,email,password})
+
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    alert("Registration successful!");
+                    navigate("/");
+                } else {
+                    alert("Registration failed: " + data.message);
+                }
         }
 
     }
