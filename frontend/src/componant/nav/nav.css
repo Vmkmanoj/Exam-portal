@@ -1,5 +1,52 @@
 .mainbox{
-    background-color: aquamarine;
+    background-color: rgb(255, 255, 255);
+    width: 150px;
+    box-shadow: 1px 2px 40px 1px ;
+    border-radius: 0px 30px 30px 0px;
+    /* margin-top: 30px; */
+    position: fixed; /* Fixed position to slide in and out */
+    top: 0;
+    left: -200px; /* Adjust to your sidebar width */
+    width: 200px; /* Width of your sidebar */
+    height: 100%; /* Full height */
+    background-color: white; /* Background color */
+    box-shadow: 1px 2px 40px 1px ; /* Optional shadow */
+    transition: left 0.3s ease; /* Smooth transition for sliding */
 
     
 }
+.sidebar-visible {
+    left: 100px; /* Sidebar position when visible */
+}
+
+.sidebar-hidden {
+    left: -200px; /* Sidebar position when hidden */
+}
+
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Additional styles for buttons and images */
+.button-home img {
+    max-width: 100%; /* Adjust image to fit button */
+}
+
+.button-home{
+    border-color: black;
+    /* background-color: brown; */
+    height: 60px;
+    width: 90px;
+    border-radius: 10px;
+    /* size: 100px; */
+}
+.button-home img{
+    border-radius: 30px;
+    height: 60px;
+    box-shadow: 3px 3px 3px 3px;
+}
+

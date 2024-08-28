@@ -21,10 +21,13 @@ function App() {
 
     <Route path="/" element={ <Login></Login>}></Route>
 
-  
-    <Route path="/home" element={<Home></Home>}></Route>
 
-    <Route path="/Taketest" element={<Taketest></Taketest>}></Route>
+
+  <Route path="/home" element={<Home></Home>}></Route>
+
+  <Route path="/Taketest" element={<Taketest></Taketest>}></Route>
+
+ 
 
 
     

@@ -1,38 +1,60 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import {image_log} from "../nav/Home.jpg";
-
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import "../nav/nav.css";
+import pen from "../nav/pen.jpg";
+import logo from "../nav/Home.jpg";
 
 function Nav() {
+    const [isSidebarVisible, setSidebarVisible] = useState(true); // State to control sidebar visibility
     const navigate = useNavigate();
 
-
-    const handingpath = (path) => {
-        navigate(path);
+    const toggleSidebar = () => {
+        setSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
     };
 
-    useEffect(() => {
-        
-        
-
-        handingpath();
-
-
-    }, [navigate]); 
+    const handleNavigation = (path) => {
+        navigate(path); // Navigate to the specified path
+        setSidebarVisible(false); // Hide sidebar after navigating
+    };
 
     return (
-        <div className="bg-white h-dvh w-28 mainbox border-black shadow-lg">
+
+        <>
+
+         {/* Button to open the sidebar */}
+         {!isSidebarVisible && (
+                <button onClick={toggleSidebar} className="open-button text-2xl mt-5 ml-6">
+                    &#9776;Open
+                </button>
+            )}
+        <div
+            className={`mainbox ${isSidebarVisible ? "sidebar-visible" : "sidebar-hidden"} transition-all duration-300`}
+            style={{ left: isSidebarVisible ? "3px" : "-200px" }} // Adjust the width based on your sidebar's width
+        >
+            
             <div className="flex flex-col ml-14 justify-between items-center mr-20">
-                <img src="path-to-logo" className="h-12" alt="Logo" />
-                <ul className="flex flex-col gap-10 text-xl cursor-pointer">
-                    <li><button className="border-cyan-300"><img src={image_log} alt="" /><Link to='/home'>,...</Link></button></li>
-                    <li onClick={() => handingpath("/taketest")}>Test</li>
-                    {/* <li onClick={() => handingpath("/practice")}>Practice</li> */}
-                </ul>
+                {/* Button to close the sidebar */}
+                <button onClick={toggleSidebar} className="close-button">x</button>
+
+                {/* Sidebar content */}
+                {isSidebarVisible && (
+                    <ul className="flex flex-col items-center justify-center gap-10 cursor-pointer mt-8">
+                        <li>
+                            <Link to="/home" className="button-home">
+                                <img src={logo} alt="Home" />
+                            </Link>
+                        </li>
+                        <li>
+                            <button onClick={() => handleNavigation("/taketest")} className="button-home ml-7">
+                                <img src={pen} alt="Take Test" />
+                            </button>
+                        </li>
+                    </ul>
+                )}
             </div>
         </div>
+
+        </>
     );
 }
 
