@@ -6,14 +6,13 @@
     /* margin-top: 30px; */
     position: fixed; /* Fixed position to slide in and out */
     top: 0;
-    left: -200px; /* Adjust to your sidebar width */
-    width: 200px; /* Width of your sidebar */
+    /* Adjust to your sidebar width */
+    width: 100px; /* Width of your sidebar */
     height: 100%; /* Full height */
     background-color: white; /* Background color */
     box-shadow: 1px 2px 40px 1px ; /* Optional shadow */
     transition: left 0.3s ease; /* Smooth transition for sliding */
 
-    
 }
 .sidebar-visible {
     left: 100px; /* Sidebar position when visible */

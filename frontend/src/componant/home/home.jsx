@@ -10,6 +10,7 @@ function Home(){
 
       <div>
 
+            <h1>heloo home</h1>
 
         
       </div>
