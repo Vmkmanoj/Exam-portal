@@ -3,6 +3,19 @@ import "../home/home.css";
 
 function Home(props){
 
+
+const qustionfeach = async () =>{
+
+  
+
+    
+
+
+
+}
+
+
+
     return(
 
       <div className="ml-52 mt-10 p-6 mainclass">
