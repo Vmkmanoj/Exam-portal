@@ -6,33 +6,20 @@ import Home from "./componant/home/home";
 import Taketest from "./componant/test/taketest";
 
 function App() {
-
-
  
-
   return (
     <>
-   
-
     <Router>
+      
     <Location1></Location1>
 
     <Routes>
 
     <Route path="/" element={ <Login></Login>}></Route>
 
+    <Route path="/home" element={<Home element="manojkumar"></Home>}></Route>
 
-
-  <Route path="/home" element={<Home></Home>}></Route>
-
-  <Route path="/Taketest" element={<Taketest></Taketest>}></Route>
-
- 
-
-
-    
-   
-    
+    <Route path="/Taketest" element={<Taketest></Taketest>}></Route>
 
     </Routes>
 
