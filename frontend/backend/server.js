@@ -105,6 +105,23 @@ app.post('/quizadding', async (req, res) => {
     }
 });
 
+//getting qustions from backend.
+
+
+app.get('/readqustion',async(req,res)=>{
+
+   
+
+    try{
+        const displayall = await quizSchemacreate.find()
+
+        res.status(200).json({message: "data succussfull",data : displayall})
+    }catch(err){
+        res.status(404).json({message : err})
+    }
+
+
+})
 
 
   
