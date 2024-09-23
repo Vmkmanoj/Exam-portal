@@ -14,6 +14,28 @@
     transition: left 0.3s ease; /* Smooth transition for sliding */
 
 }
+.auth-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding */
+    border: none; /* Remove borders */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin-top: 480px;
+  }
+  
+  .auth-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+  .auth-button:focus {
+    outline: none; /* Remove outline on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Subtle shadow on focus */
+  }
+  
+
 .sidebar-visible {
     left: 100px; /* Sidebar position when visible */
 }

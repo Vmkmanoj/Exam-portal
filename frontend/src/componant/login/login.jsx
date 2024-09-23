@@ -29,12 +29,10 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = val === "login" ? "http://localhost:3000/login" : "http://localhost:3000/register";
+        const url = val === "login" ? "http://localhost:3001/login" : "http://localhost:3001/register";
         const body = val === "login"
             ? JSON.stringify({ email, password })
             : JSON.stringify({ name, email, password });
-
-        
 
         const response = await fetch(url, {
             method: 'POST',
@@ -46,11 +44,19 @@ function Login() {
         
         const data = await response.json();
 
+        console.log(data.token)
+
         if (data.success) {
             alert(val === "login" ? 'Login successful!' : "Registration successful!");
+
             if (val === "login") {
+                // Store the JWT token in localStorage
+                localStorage.setItem('token', data.token); // Assuming the token is in `data.token`
+
+                // Redirect to the home page after login
                 navigate('/home');
             } else {
+                // After registration, redirect to login
                 navigate('/');
             }
         } else {

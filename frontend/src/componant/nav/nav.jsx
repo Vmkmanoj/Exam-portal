@@ -23,6 +23,7 @@ function Nav() {
 
 
                 {/* nav button staring */}
+               
              
                 
                     <ul className="flex flex-col items-center justify-center gap-10 cursor-pointer mt-8">
@@ -57,9 +58,34 @@ function Nav() {
                            
                         </li>
 
+                        <li> <div className="logout">
+  {localStorage.getItem('token') ? (
+    <button
+      className="auth-button"
+      onClick={() => {
+        localStorage.removeItem('token');
+        window.location.replace('/');
+      }}
+    >
+      Logout
+    </button>
+  ) : (
+    <button
+      className="auth-button"
+      onClick={() => window.location.replace('/')}
+    >
+      Login
+    </button>
+  )}
+</div>
+</li>
+                    
+
 
 
                     </ul>
+
+       
                 
             </div>
         </div>

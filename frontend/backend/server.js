@@ -1,25 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const body_parser = require("body-parser");
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-const port = 3000;
+const port = 3001;
 const app = express();
 app.use(cors());
 app.use(body_parser.json());
 
-//mongodb connection
-
-
+// MongoDB connection
 mongoose.connect('mongodb+srv://vmkmano13:13-Aug-2000@examuser.p9tc4.mongodb.net/?retryWrites=true&w=majority&appName=examuser')
-.then(()=>{
+.then(() => {
     console.log("MongoDB connected");
-}).catch((err)=>{
+}).catch((err) => {
     console.log("Error", err);
 });
 
-//user schema
-
+// User Schema
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -28,52 +26,67 @@ const userSchema = new mongoose.Schema({
 
 const usercreate = mongoose.model('users', userSchema);
 
-
-//qustions schema
-
-
+// Questions Schema
 const quizSchema = new mongoose.Schema({
     question: { type: String, required: true },
     options: [String], // Array of strings
     correctAnswer: { type: String, required: true }
-  });
+});
 
-const quizSchemacreate = mongoose.model('qustions',quizSchema);
+const quizSchemacreate = mongoose.model('qustions', quizSchema);
 
-//login
+// JWT Secret Key
+const JWT_SECRET = 'examprotal';
 
+// Login Route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
+    
+    try {
+        const findinguser = await usercreate.findOne({ email, password });
 
-    const findinguser = await usercreate.findOne({ email, password });
-
-    if (findinguser) {
-        res.json({ success: true, message: 'Login successful' });
-    } else {
-        res.json({ success: false, message: "Login failed" });
+        if (findinguser) {
+            const payload = { user: { id: findinguser.id }};
+            const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token valid for 1 hour
+            return res.json({ success: true, message: 'Login successful', token });
+        } else {
+            return res.status(401).json({ success: false, message: "Invalid email or password" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 });
 
-//user registertion
+// JWT Verification Middleware
+const verifyToken = (req, res, next) => {
+    const token = req.header('Authorization')?.split(' ')[1]; // Get the token from 'Bearer <token>'
 
+    if (!token) {
+        return res.status(401).json({ message: "Access denied, token missing" });
+    }
+
+    try {
+        const verified = jwt.verify(token, JWT_SECRET);
+        req.user = verified.user;
+        next();
+    } catch (err) {
+        res.status(401).json({ message: "Invalid token" });
+    }
+};
+
+// Register Route
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
-    // Check if the user already exists
-    const existuser = await usercreate.findOne({ email });
-
-    console.log(req.body);
-
-    if (existuser) {
-        return res.json({ success: false, message: "User already exists" });
-    }
-
-    const createuser = new usercreate({ name, email, password });
-
-
-    console.log(createuser);
-
     try {
+        const existuser = await usercreate.findOne({ email });
+
+        if (existuser) {
+            return res.json({ success: false, message: "User already exists" });
+        }
+
+        const createuser = new usercreate({ name, email, password });
         await createuser.save();
         res.json({ success: true, message: 'User registered successfully' });
     } catch (error) {
@@ -81,23 +94,16 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
-//adding qustions
-
-
-app.post('/quizadding', async (req, res) => {
+// Add Quiz (Protected Route)
+app.post('/quizadding', verifyToken, async (req, res) => {
     const { question, options, correctAnswer } = req.body;
 
-    console.log(options);
-
     try {
-        // Find and update the document or create a new one
         const result = await quizSchemacreate.findOneAndUpdate(
             { question: question },
-            { options: options, correctAnswer: correctAnswer }, // Combine update fields
-            { new: true, upsert: true } // `new: true` returns the updated document; `upsert: true` creates a new document if none is found
+            { options: options, correctAnswer: correctAnswer }, 
+            { new: true, upsert: true } 
         );
-
         res.status(200).json({ message: 'Quiz added successfully', data: result });
     } catch (error) {
         console.error('Error adding quiz:', error);
@@ -105,32 +111,17 @@ app.post('/quizadding', async (req, res) => {
     }
 });
 
-//getting qustions from backend.
-
-
-app.get('/readqustion',async(req,res)=>{
-
-   
-
-    try{
-        const displayall = await quizSchemacreate.find()
-
-        res.status(200).json({message: "data succussfull",data : displayall})
-    }catch(err){
-        res.status(404).json({message : err})
+// Get Questions (Protected Route)
+app.get('/readqustion', verifyToken, async (req, res) => {
+    try {
+        const displayall = await quizSchemacreate.find();
+        res.status(200).json({ message: "Data fetched successfully", data: displayall });
+    } catch (err) {
+        res.status(404).json({ message: err.message });
     }
+});
 
-
-})
-
-
-  
-
-
-
-//server listen
-
-app.listen(port, (req,res) => {
+// Server listen
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    
 });

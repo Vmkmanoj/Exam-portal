@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../home/home.css";
 
 function Home() {
@@ -7,7 +7,7 @@ function Home() {
 
   const questionFetch = async () => {
     try {
-      const response = await fetch('http://localhost:3000/readqustion', {
+      const response = await fetch('http://localhost:3001/readqustion', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -18,6 +18,7 @@ function Home() {
 
       const data = await response.json();
       setQuestions(data.data); // Update state with fetched data
+      console.log(questions)
 
     } catch (error) {
       console.error('Error fetching questions:', error);
@@ -25,13 +26,17 @@ function Home() {
     }
   };
 
+
+  useEffect(()=>{
+    questionFetch();
+
+  },[])
+
   return (
     <div className="ml-52 mt-10 p-6 mainclass">
-      <div>
-        <button onClick={questionFetch}>Click to Fetch Questions</button>
-      </div>
+      
 
-      {error && <p className="error">{error}</p>} {/* Display error message if any */}
+      {/* {error && <p className="error">{error}</p>} Display error message if any */}
 
       <div>
         {questions.length > 0 ? (
