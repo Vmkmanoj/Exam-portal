@@ -27,7 +27,7 @@ function App() {
     };
     console.log(quizData);
     try {
-      const response = await fetch('http://localhost:3000/quizadding', {
+      const response = await fetch('http://localhost:3001/quizadding', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

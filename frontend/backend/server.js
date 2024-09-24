@@ -30,7 +30,6 @@ const usercreate = mongoose.model('users', userSchema);
 const quizSchema = new mongoose.Schema({
     question: { type: String, required: true },
     options: [String], // Array of strings
-    correctAnswer: { type: String, required: true }
 });
 
 const quizSchemacreate = mongoose.model('qustions', quizSchema);
@@ -95,13 +94,13 @@ app.post('/register', async (req, res) => {
 });
 
 // Add Quiz (Protected Route)
-app.post('/quizadding', verifyToken, async (req, res) => {
+app.post('/quizadding', async (req, res) => {
     const { question, options, correctAnswer } = req.body;
 
     try {
         const result = await quizSchemacreate.findOneAndUpdate(
             { question: question },
-            { options: options, correctAnswer: correctAnswer }, 
+            { options: options }, 
             { new: true, upsert: true } 
         );
         res.status(200).json({ message: 'Quiz added successfully', data: result });
@@ -112,9 +111,18 @@ app.post('/quizadding', verifyToken, async (req, res) => {
 });
 
 // Get Questions (Protected Route)
-app.get('/readqustion', verifyToken, async (req, res) => {
+app.get('/readqustion',verifyToken, async (req, res) => {
+
+    const {token}  = req.body;
+
+    console.log(token);
+
+
     try {
         const displayall = await quizSchemacreate.find();
+
+        
+
         res.status(200).json({ message: "Data fetched successfully", data: displayall });
     } catch (err) {
         res.status(404).json({ message: err.message });

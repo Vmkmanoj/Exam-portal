@@ -1,5 +1,98 @@
-.mainclass {
-    border: 2px solid blue;
-    margin-right: 60px;
-    height:700px;
+/* Scoped to the home-page class */
+.home-page {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+/* Main container styling */
+.home-page .mainclass {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid #e1e4e8;
+}
+
+/* Question list styling */
+.home-page ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.home-page li {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e1e4e8;
+}
+
+.home-page li strong {
+  font-size: 1.2rem;
+  color: #343a40;
+}
+
+.home-page input[type="radio"] {
+  margin-right: 10px;
+}
+
+/* Input field styling */
+.home-page #input {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  color: #495057;
+}
+
+.home-page #input:hover {
+  background-color: #e9ecef;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Error message styling */
+.home-page .error {
+  color: #e74c3c;
+  background-color: #f8d7da;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* No questions available message */
+.home-page p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+/* Button styling (if needed) */
+.home-page button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.home-page button:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for larger screens */
+@media (min-width: 768px) {
+  .home-page .mainclass {
+    margin-top: 50px;
+    padding: 40px;
   }
+
+  .home-page li {
+    padding: 15px;
+  }
+}
