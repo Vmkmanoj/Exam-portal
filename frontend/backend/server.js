@@ -44,6 +44,7 @@ app.post('/login', async (req, res) => {
     try {
         const findinguser = await usercreate.findOne({ email, password });
 
+
         if (findinguser) {
             const payload = { user: { id: findinguser.id }};
             const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token valid for 1 hour

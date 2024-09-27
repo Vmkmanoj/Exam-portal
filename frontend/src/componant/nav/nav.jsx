@@ -1,23 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../nav/nav.css";
-import pen from "../nav/pen.jpg";
-import logo from "../nav/Home.jpg";
+
 
 function Nav() {
+
+  const username = async () =>{
+
+    const name = await fetch('http://localhost:3001/login',{
+      method:'post',
+      headers:{
+        'Content-Type':'Application/json'
+      }
+    })
+
+    console.log(name.json());
+
+  }
    
-    // const navigate = useNavigate();
 
-
-
-    // // const handleNavigation = (path) => {
-    // //     navigate(path); // Navigate to the specified path
-    // // };
+  useEffect(()=>{
+    username();
+  })
+  
 
     return (
 
         <>
         <div className={`mainbox  transition-all duration-300 w-32`}>
+
+          <div className="image"> 
+
+            
+            
+            
+            
+             </div>
             
             <div className="flex flex-col ml-14 justify-between items-center mr-20">
 
