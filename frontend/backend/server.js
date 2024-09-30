@@ -44,6 +44,8 @@ app.post('/login', async (req, res) => {
     try {
         const findinguser = await usercreate.findOne({ email, password });
 
+        console.log(findinguser.id);
+
 
         if (findinguser) {
             const payload = { user: { id: findinguser.id }};
@@ -52,8 +54,8 @@ app.post('/login', async (req, res) => {
         } else {
             return res.status(401).json({ success: false, message: "Invalid email or password" });
         }
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        console.error(e);
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
@@ -69,6 +71,7 @@ const verifyToken = (req, res, next) => {
     try {
         const verified = jwt.verify(token, JWT_SECRET);
         req.user = verified.user;
+        req.userId= verified._id;
         next();
     } catch (err) {
         res.status(401).json({ message: "Invalid token" });
@@ -96,7 +99,10 @@ app.post('/register', async (req, res) => {
 
 // Add Quiz (Protected Route)
 app.post('/quizadding', async (req, res) => {
-    const { question, options, correctAnswer } = req.body;
+    const { question, options} = req.body;
+    const {Correctans} = answers;
+
+   console.log(Correctans);
 
     try {
         const result = await quizSchemacreate.findOneAndUpdate(
@@ -105,6 +111,7 @@ app.post('/quizadding', async (req, res) => {
             { new: true, upsert: true } 
         );
         res.status(200).json({ message: 'Quiz added successfully', data: result });
+        res.send(Correctans);
     } catch (error) {
         console.error('Error adding quiz:', error);
         res.status(500).json({ message: 'Server error' });
@@ -129,6 +136,22 @@ app.get('/readqustion',verifyToken, async (req, res) => {
         res.status(404).json({ message: err.message });
     }
 });
+
+//user
+
+app.get('/user', async (req,res)=>{
+
+
+    const userId = await userSchema.findById(req.userId);
+
+    console.log(userId);
+
+
+
+
+})
+
+
 
 // Server listen
 app.listen(port, () => {

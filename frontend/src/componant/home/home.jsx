@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../home/home.css";
+// import { UNSAFE_FetchersContext } from "react-router-dom";
 
 function Home() {
   const [questions, setQuestions] = useState([]);
@@ -28,36 +29,74 @@ function Home() {
     }
   };
 
+
+  const username = async () => {
+
+    const token = localStorage.getItem('token')
+
+
+    const response = await fetch('http://localhost:3001/user', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const res = await response.json();
+
+    console.log(res);
+
+
+  }
   useEffect(() => {
     questionFetch();
   }, []);
 
+
+
   return (
     <div className="home-page">
-      <div className="ml-52 mt-10 p-6 mainclass">
-        {error && <p className="error">{error}</p>}
+      <form>
+        <div className="ml-52 mt-10 p-6 mainclass">
+          {error && <p className="error">{error}</p>}
 
-        <div>
-          {questions.length > 0 ? (
-            <ul>
-              {questions.map((question) => (
-                <li key={question._id}>
-                  <strong>Question:</strong> {question.question}
-                  <ul>
-                    {question.options.map((option, index) => (
-                      <li key={index} id="input">
-                        <input type="radio" name={`question-${question._id}`} /> {option}
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No questions available</p>
-          )}
+          <div>
+            {questions.length > 0 ? (
+              <ul>
+                {questions.map((question) => (
+                  <li key={question._id}>
+                    <strong>Question:</strong> {question.question}
+                    <ul>
+                      {question.options.map((option, index) => (
+                        <li key={index}>
+                          <input
+                            type="radio"
+                            name={`question-${question._id}`}
+                            id={`option-${question._id}-${index}`}
+                          />
+                          <label
+                            htmlFor={`option-${question._id}-${index}`}
+                            className="cursor-pointer"
+                          >
+                            {option}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No questions available</p>
+            )}
+          </div>
+          <div className="submit-button">
+            <button type="submit">Submit</button>
+          </div>
         </div>
-      </div>
+      </form>
+
     </div>
   );
 }

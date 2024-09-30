@@ -11,6 +11,8 @@ function App() {
   }); 
   const [ans, setAns] = useState("");
 
+
+
   function handleOptionChange(e, option) {
     setOptions({
       ...options,
@@ -23,7 +25,7 @@ function App() {
     const quizData = {
       question: quiz,
       options: [options.optionA, options.optionB, options.optionC, options.optionD],
-      answers: ans
+      answers: { Correctans : ans}
     };
     console.log(quizData);
     try {
