@@ -4,6 +4,8 @@ const body_parser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
+// const userans = require('./models/userans');
+
 const port = 3001;
 const app = express();
 app.use(cors());
@@ -34,6 +36,25 @@ const quizSchema = new mongoose.Schema({
 });
 
 const quizSchemacreate = mongoose.model('qustions', quizSchema);
+
+
+//user ans
+
+const userAnsSchema = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: true,
+    },
+    questions: [{
+        question: { type: String, required: true }, // Store the question text
+        answers: [{ type: String }] // Store an array of answers
+    }]
+});
+
+// const userans = mongoose.model('userAns', userAnsSchema);
+
+
+const userans = mongoose.model('userAns', userAnsSchema);
 
 // JWT Secret Key
 const JWT_SECRET = 'examprotal';
@@ -152,6 +173,48 @@ app.get('/user', verifyToken, async (req, res) => {
         res.status(500).json({ error: 'Database error', details: error.message });
     }
 });
+
+
+app.post('/userans', verifyToken, async (req, res) => {
+    const userId = req.user.id; // Getting user ID from the token
+    const { question, Answers } = req.body; // Extracting question and answers from the body
+
+    console.log("userid", userId);
+    console.log('Request Body:', req.body);
+
+    try {
+        const user = await usercreate.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check that question and Answers are provided and valid
+        if (!question || !Answers || !Array.isArray(Answers) || Answers.length === 0) {
+            return res.status(400).json({ error: 'Question and Answers are required' });
+        }
+
+        const Username = new userans({
+            userName: user.name,
+            questions: [{
+                question: question,
+                answers: Answers,
+            }],
+        });
+
+        // Log the data before saving
+        console.log("Data to be saved:", Username);
+
+        await Username.save();
+        res.status(200).json({ ans: "Answers are saved" });
+    } catch (error) {
+        console.error('Error saving user answers:', error);
+        res.status(500).json({ message: "error", err: error.message });
+    }
+});
+
+
+
+
 
 
 

@@ -10,14 +10,14 @@ function Nav() {
 
   const Feactingname = async ()=>{
 
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('token');
 
 
     const response = await fetch('http://localhost:3001/user',{
       method:'GET',
       headers:{
-        'Authorization': `Bearer ${token}`,
-        'Content-Type':'Application/json'
+       'Authorization': `Bearer ${accessToken}`, // Ensure this header is included
+    'Content-Type': 'application/json',
       }
     })
 
@@ -46,7 +46,7 @@ function Nav() {
 
           <div className="user_name mt-10">
 
-            <label className="name text-green-400">Welcome <span className="text-black">{username.toUpperCase()}</span></label>
+            <label className="name text-green-400">Welcome <span className="text-black">{username}</span></label>
             
              </div>
             
