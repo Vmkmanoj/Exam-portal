@@ -30,6 +30,7 @@ const usercreate = mongoose.model('users', userSchema);
 const quizSchema = new mongoose.Schema({
     question: { type: String, required: true },
     options: [String], // Array of strings
+    rightans : {type: String}
 });
 
 const quizSchemacreate = mongoose.model('qustions', quizSchema);
@@ -44,16 +45,16 @@ app.post('/login', async (req, res) => {
     try {
         const findinguser = await usercreate.findOne({ email, password });
 
-        console.log(findinguser.id);
-
-
-        if (findinguser) {
-            const payload = { user: { id: findinguser.id }};
-            const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token valid for 1 hour
-            return res.json({ success: true, message: 'Login successful', token });
-        } else {
+        // Check if findinguser is null
+        if (!findinguser) {
             return res.status(401).json({ success: false, message: "Invalid email or password" });
         }
+
+        // Now you can safely access findinguser.id
+        const payload = { user: { id: findinguser._id }}; // Use _id, not id
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token valid for 1 hour
+
+        return res.json({ success: true, message: 'Login successful', token });
     } catch (e) {
         console.error(e);
         res.status(500).json({ success: false, message: "Server error" });
@@ -70,13 +71,13 @@ const verifyToken = (req, res, next) => {
 
     try {
         const verified = jwt.verify(token, JWT_SECRET);
-        req.user = verified.user;
-        req.userId= verified._id;
+        req.user = verified.user; // This should contain the user ID
         next();
     } catch (err) {
         res.status(401).json({ message: "Invalid token" });
     }
 };
+
 
 // Register Route
 app.post('/register', async (req, res) => {
@@ -99,24 +100,23 @@ app.post('/register', async (req, res) => {
 
 // Add Quiz (Protected Route)
 app.post('/quizadding', async (req, res) => {
-    const { question, options} = req.body;
-    const {Correctans} = answers;
-
-   console.log(Correctans);
-
+    const { question, options, rightans } = req.body;
+  
     try {
-        const result = await quizSchemacreate.findOneAndUpdate(
-            { question: question },
-            { options: options }, 
-            { new: true, upsert: true } 
-        );
-        res.status(200).json({ message: 'Quiz added successfully', data: result });
-        res.send(Correctans);
+      const result = await quizSchemacreate.findOneAndUpdate(
+        { question: question },
+        { options: options, rightans: rightans }, // Include rightans in the update object
+        { new: true, upsert: true }
+      );
+  
+      // Return the updated document with rightans included
+      res.status(200).json({ message: 'Quiz added successfully', data: result });
     } catch (error) {
-        console.error('Error adding quiz:', error);
-        res.status(500).json({ message: 'Server error' });
+      console.error('Error adding quiz:', error);
+      res.status(500).json({ message: 'Server error' });
     }
-});
+  });
+  
 
 // Get Questions (Protected Route)
 app.get('/readqustion',verifyToken, async (req, res) => {
@@ -139,17 +139,20 @@ app.get('/readqustion',verifyToken, async (req, res) => {
 
 //user
 
-app.get('/user', async (req,res)=>{
+app.get('/user', verifyToken, async (req, res) => {
+    const userId = req.user.id; // req.user is populated by verifyToken middleware
+    
+    try {
+        const user = await usercreate.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({ username: user.name }); // return the 'name' field from your schema
+    } catch (error) {
+        res.status(500).json({ error: 'Database error', details: error.message });
+    }
+});
 
-
-    const userId = await userSchema.findById(req.userId);
-
-    console.log(userId);
-
-
-
-
-})
 
 
 

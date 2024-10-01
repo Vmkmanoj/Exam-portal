@@ -10,9 +10,9 @@ function App() {
     optionD: ""
   }); 
   const [ans, setAns] = useState("");
+  const [output, setOutput] = useState({}); // Initializes an empty object
 
-
-
+  // Handling option changes
   function handleOptionChange(e, option) {
     setOptions({
       ...options,
@@ -20,21 +20,22 @@ function App() {
     });
   }
 
-  const  createQuiz =async(e)=> {
+  // Creating the quiz and sending data to the backend
+  const createQuiz = async (e) => {
     e.preventDefault();
     const quizData = {
       question: quiz,
       options: [options.optionA, options.optionB, options.optionC, options.optionD],
-      answers: { Correctans : ans}
+      rightans: ans,
     };
-    console.log(quizData);
+  
     try {
-      const response = await fetch('http://localhost:3001/quizadding', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/quizadding", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(quizData)
+        body: JSON.stringify(quizData),
       });
   
       if (!response.ok) {
@@ -42,30 +43,26 @@ function App() {
       }
   
       const data = await response.json();
-      console.log(data); // Log the response data
+      // console.log(data); // Log the response data
+  
+      // Set the output to the response data directly
+      setOutput(data);
+
+      console.log(output)
     } catch (error) {
       console.error("Error creating quiz:", error);
     }
-
-
-    setQuiz("");
-    setOptions({
+  
+    setQuiz(""); // Clear question input
+    setOptions({  // Clear all options
       optionA: "",
       optionB: "",
       optionC: "",
-      optionD: ""
+      optionD: "",
     });
-
-  }
-
-
-
-
-
-
-
-
-
+  
+    setAns(""); // Clear the correct answer
+  };
 
   return (
     <>
@@ -115,6 +112,16 @@ function App() {
 
           <button type="submit">Create Quiz</button>
         </form>
+
+        {/* Display the output if available */}
+        {output && output.data && (
+          <div>
+            <h3>Quiz Created:</h3>
+            <p>Question: {output.data.question}</p>
+            <p>Options: {output.data.options.join(", ")}</p>
+            <p>Correct Answer: {output.data.rightans}</p>
+          </div>
+        )}
       </div>
     </>
   );

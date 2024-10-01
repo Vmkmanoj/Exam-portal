@@ -23,7 +23,7 @@
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 16px; /* Font size */
     transition: background-color 0.3s ease; /* Smooth transition */
-    margin-top: 480px;
+    margin-top: 400px;
   }
   
   .auth-button:hover {
@@ -70,4 +70,23 @@
     height: 60px;
     box-shadow: 3px 3px 3px 3px;
 }
+
+.user_name {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align it to the right side of the navbar */
+    padding: 0 20px;
+    color: white; /* Adjust this color based on your navbar background */
+    font-size: 1.2rem;
+  }
+  
+  .user_name .name {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .user_name span {
+    color: #000000; /* Gold color for the username */
+    margin-left: 5px;
+  }
 

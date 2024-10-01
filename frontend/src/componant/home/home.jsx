@@ -30,25 +30,25 @@ function Home() {
   };
 
 
-  const username = async () => {
+  // const username = async () => {
 
-    const token = localStorage.getItem('token')
-
-
-    const response = await fetch('http://localhost:3001/user', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-
-    const res = await response.json();
-
-    console.log(res);
+  //   const token = localStorage.getItem('token')
 
 
-  }
+  //   const response = await fetch('http://localhost:3001/user', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+
+  //   const res = await response.json();
+
+  //   console.log(res);
+
+
+  // }
   useEffect(() => {
     questionFetch();
   }, []);
@@ -85,15 +85,19 @@ function Home() {
                       ))}
                     </ul>
                   </li>
+                  
                 ))}
+
+<div className="submit-button">
+            <button type="submit">Submit</button>
+          </div>
               </ul>
             ) : (
               <p>No questions available</p>
             )}
           </div>
-          <div className="submit-button">
-            <button type="submit">Submit</button>
-          </div>
+          
+         
         </div>
       </form>
 

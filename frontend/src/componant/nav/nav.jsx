@@ -5,22 +5,37 @@ import "../nav/nav.css";
 
 function Nav() {
 
-  const username = async () =>{
+  const [username,setUsername] =  useState("");
 
-    const name = await fetch('http://localhost:3001/login',{
-      method:'post',
+
+  const Feactingname = async ()=>{
+
+    const token = localStorage.getItem('token');
+
+
+    const response = await fetch('http://localhost:3001/user',{
+      method:'GET',
       headers:{
+        'Authorization': `Bearer ${token}`,
         'Content-Type':'Application/json'
       }
     })
 
-    console.log(name.json());
+    const userJson = await response.json();
+
+    // console.log(userJson.username)
+
+    setUsername(userJson.username);
 
   }
+
+
+
    
 
   useEffect(()=>{
-    username();
+    // username();
+    Feactingname();
   })
   
 
@@ -29,11 +44,9 @@ function Nav() {
         <>
         <div className={`mainbox  transition-all duration-300 w-32`}>
 
-          <div className="image"> 
+          <div className="user_name mt-10">
 
-            
-            
-            
+            <label className="name text-green-400">Welcome <span className="text-black">{username.toUpperCase()}</span></label>
             
              </div>
             
@@ -63,12 +76,12 @@ function Nav() {
 
                         <li className="flex ml-14">
 
-                            <Link to="/taketest">
+                            <Link to="/taketest" className="flex items-center flex-col gap-2">
                           
                                
-                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 ml-2">
+                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 mr-14">
   <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-</svg> <li className="w-24"> TEST</li> 
+</svg> <span className="w-24"> TEST</span> 
 
                             </Link>
                            
