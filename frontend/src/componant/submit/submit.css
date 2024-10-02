@@ -1,0 +1,15 @@
+
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+  }
+  
+  .ans {
+    font-size: 2rem; /* Adjust font size as needed */
+    color: #333; /* You can change the color as per your preference */
+  }
+  

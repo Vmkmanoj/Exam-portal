@@ -4,6 +4,7 @@ import Nav from "./componant/nav/nav"
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./componant/home/home";
 import Taketest from "./componant/test/taketest";
+import Submit from "./componant/submit/submit";
 
 function App() {
  
@@ -20,6 +21,10 @@ function App() {
     <Route path="/home" element={<Home element="manojkumar"></Home>}></Route>
 
     <Route path="/Taketest" element={<Taketest></Taketest>}></Route>
+
+    <Route path="/Anssumit" element={<Submit></Submit>}></Route>
+
+    
 
     </Routes>
 

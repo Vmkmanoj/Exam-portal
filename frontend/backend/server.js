@@ -176,8 +176,8 @@ app.get('/user', verifyToken, async (req, res) => {
 
 
 app.post('/userans', verifyToken, async (req, res) => {
-    const userId = req.user.id; // Getting user ID from the token
-    const { question, Answers } = req.body; // Extracting question and answers from the body
+    const userId = req.user.id;
+    const { questions } = req.body;
 
     console.log("userid", userId);
     console.log('Request Body:', req.body);
@@ -188,29 +188,30 @@ app.post('/userans', verifyToken, async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Check that question and Answers are provided and valid
-        if (!question || !Answers || !Array.isArray(Answers) || Answers.length === 0) {
-            return res.status(400).json({ error: 'Question and Answers are required' });
+        // Validate that questions are provided and properly formatted
+        if (!questions || !Array.isArray(questions) || questions.length === 0) {
+            return res.status(400).json({ error: 'Questions are required' });
         }
 
-        const Username = new userans({
+        const userAnswers = new userans({
             userName: user.name,
-            questions: [{
-                question: question,
-                answers: Answers,
-            }],
+            questions: questions.map(q => ({
+                question: q.question,
+                answers: q.answers
+            }))
         });
 
-        // Log the data before saving
-        console.log("Data to be saved:", Username);
+        // Log the data before saving for debugging purposes
+        console.log("Data to be saved:", userAnswers);
 
-        await Username.save();
-        res.status(200).json({ ans: "Answers are saved" });
+        await userAnswers.save(); // Save the userAnswers, not Username
+        res.json({ ans: "Answers are saved" ,success : true });
     } catch (error) {
         console.error('Error saving user answers:', error);
         res.status(500).json({ message: "error", err: error.message });
     }
 });
+
 
 
 

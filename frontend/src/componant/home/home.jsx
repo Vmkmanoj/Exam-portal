@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../home/home.css";
+import submit from "../submit/submit";
 
 function Home() {
   const [questions, setQuestions] = useState([]);
@@ -30,11 +31,16 @@ function Home() {
   };
 
   const displaying = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
     const accessToken = localStorage.getItem('token');
 
-    // console.log(clickans); // Log clickans to inspect its structure
+    const answersPayload = {
+        questions: Object.entries(clickans).map(([question, answer]) => ({
+            question: question,
+            answers: [answer] // Store as an array of answers
+        }))
+    };
 
     try {
         const response = await fetch('http://localhost:3001/userans', {
@@ -43,18 +49,18 @@ function Home() {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(clickans), // Send the state as the body
+            body: JSON.stringify(answersPayload), // Send structured data
         });
-        
-        
-        
-
         if (!response.ok) {
             throw new Error('Failed to submit answers');
         }
 
         const res = await response.json();
-        // console.log(res);
+        if(res.success){
+            window.location.replace('/Anssumit')
+        }
+    
+
     } catch (error) {
         console.error('Error submitting answers:', error);
     }
@@ -62,13 +68,15 @@ function Home() {
 
 
 
-  const handleChanges = (questionId, option) => {
-    // Update the selected answer for a specific question
+
+const handleChanges = (question, option) => {
+    // Store selected answer in an object
     setClickans((prev) => ({
-      ...prev,
-      [questionId]: option, // Set the selected option for the given question
+        ...prev,
+        [question]: option, // Key the answers by question
     }));
-  };
+};
+
 
   useEffect(() => {
     questionFetch(); // Fetch questions when component mounts
